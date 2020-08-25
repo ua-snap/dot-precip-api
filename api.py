@@ -1,19 +1,17 @@
 import flask
 from flask import request, jsonify
+import pickle
 import point_data
+
+# For this API to return valid Pickle binary data, the receiving Python
+# version MUST match the Python version of the API. Currently, set to Python
+# 3.6.10 for development.
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
 
-
-
-# Create some test data for our catalog in the form of a list of dictionaries.
-api_call = [
-    {
-        "xcoord": -2173040,
-        "ycoord": 882215
-    }
-]
+# Bellow
+# api_call = [{"xcoord": -2173040, "ycoord": 882215}]
 
 
 @app.route("/", methods=["GET"])
@@ -24,9 +22,6 @@ def home():
 
 @app.route("/api/percentiles", methods=["GET"])
 def api_request_percentiles():
-    # Check if an ID was provided as part of the URL.
-    # If ID is provided, assign it to a variable.
-    # If no ID is provided, display an error in the browser.
     if "xcoord" in request.args:
         xcoord = request.args["xcoord"]
     else:
@@ -37,9 +32,9 @@ def api_request_percentiles():
     else:
         return "Error: No Y coordinate provided. Please specify a Y coordinate."
 
-    return jsonify(point_data.get_point_data(xcoord, ycoord))
+    # Recommended by Xarray documentation to use the protocol -1 for most efficiency
+    return pickle.dumps(point_data.get_percentile_data(xcoord, ycoord), protocol=-1)
 
-    # return jsonify(results)
 
-
-app.run()
+if __name__ == "__main__":
+    app.run()

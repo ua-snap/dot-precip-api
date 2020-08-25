@@ -1,7 +1,11 @@
-import flask
-from flask import request, jsonify
+"""
+Flask API for requesting data from dot_data script.
+"""
+
 import pickle
 from socket import gethostname
+import flask
+from flask import request
 import dot_data
 
 # For this API to return valid Pickle binary data, the receiving Python
@@ -17,19 +21,29 @@ app.config["DEBUG"] = True
 
 @app.route("/", methods=["GET"])
 def home():
+    """
+    Function for root-level API Help Document
+    """
     return f"""<h1>API for DOT Precipitation Frequency (PF) Forecasts</h1>
 <p>An API for collecting precipitation frequency percentiles from GCM-generated data in a <a href='http://xarray.pydata.org/en/stable/io.html#:~:text=open_dataset(store)-,Pickle,%5B22%5D%3A%20pkl%20%3D%20pickle.'>Pickle</a> formatted <a href='http://xarray.pydata.org/en/stable/generated/xarray.DataArray.html'>xarray.DataArray</a>.</p>
 <p>To use the API, simply request an X-coordinate and a Y-coordinate in the EPSG:3338 grid.</p>
 <p><b>NOTE:</b> There is only data over the state of Alaska and this data is only usable by unpickling the data by a client script.</p>
-<p><b>EXAMPLE:</b> For a single point, you would request data like this: <a href='http://{gethostname()}/api/percentiles?xcoord=-2173040&ycoord=882215'>http://{gethostname()}/api/percentiles?xcoord=-2173040&ycoord=882215</a>"""
+<p><b>EXAMPLE:</b> For a single point, you would request data like this: 
+<a href='http://{gethostname()}/api/percentiles?xcoord=-2173040&ycoord=882215'>
+http://{gethostname()}/api/percentiles?xcoord=-2173040&ycoord=882215</a>"""
 
 
 @app.route("/api/percentiles", methods=["GET"])
 def api_request_percentiles():
+    """
+    Function for API call to backend script for dot_data get_percentile_data()
+
+    :return: Pickle formatted xarray.DataArray object
+    """
     if "xcoord" in request.args:
         xcoord = request.args["xcoord"]
     else:
-        return "Error: No X coordinate provided. Please specify a X coordinate ."
+        return "Error: No X coordinate provided. Please specify an X coordinate ."
 
     if "ycoord" in request.args:
         ycoord = request.args["ycoord"]

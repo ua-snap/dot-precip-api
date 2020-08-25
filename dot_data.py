@@ -1,14 +1,15 @@
-##############################################
-# For a given pair of xc and yc coordinates,
-# print a table summarizing the final data
-# at that point.
-##############################################
+"""
+For a given pair of X and Y coordinates,
+return an xarray.DataArray of all the
+precipitation frequency available from
+the NC files.
+"""
 
-import sys, os
+import os
 import xarray as xr
 import numpy as np
 
-DATADIR = "/usr/local/data/combined/"
+DATADIR = os.getenv("DATADIR", default="/usr/local/data/combined/")
 
 DURATIONS = [
     "60m",

@@ -8,8 +8,9 @@ the NC files.
 import os
 import xarray as xr
 import numpy as np
+import psycopg2
 
-DATADIR = os.getenv("DATADIR", default="/usr/local/data/combined/")
+DATADIR = os.getenv("DATADIR", default="/usr/local/data/undiff/")
 
 DURATIONS = [
     "60m",
@@ -18,6 +19,7 @@ DURATIONS = [
     "6h",
     "12h",
     "24h",
+    "2d",
     "3d",
     "4d",
     "7d",
@@ -61,7 +63,7 @@ def get_percentile_data(xcoord, ycoord):
                 ds = xr.open_dataset(
                     os.path.join(
                         DATADIR,
-                        f"pcpt_{dataset}_sum_wrf_{duration}_{ts_str}_combined.nc",
+                        f"pcpt_{dataset}_sum_wrf_{duration}_{ts_str}_undiff.nc",
                     )
                 )
                 for var in VARIABLES:
@@ -79,4 +81,5 @@ def get_percentile_data(xcoord, ycoord):
 
 if __name__ == "__main__":
     # Test data to confirm things are working
-    get_percentile_data(-2173040, 882215)
+    # get_percentile_data(-2173040, 882215)
+    get_percentile_data(-117682.86362522288, 1963676.5978819495)

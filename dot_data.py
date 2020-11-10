@@ -31,7 +31,7 @@ DURATIONS = [
 ]
 DATASETS = ["GFDL-CM3", "NCAR-CCSM4"]
 TIMESLICES = [("2020", "2049"), ("2050", "2079"), ("2080", "2099")]
-VARIABLES = ["pf-upper", "pf", "pf-lower"]
+VARIABLES = ["pf_upper", "pf", "pf_lower"]
 INTERVALS = [2.0, 5.0, 10.0, 25.0, 50.0, 100.0, 200.0, 500.0, 1000.0]
 
 
